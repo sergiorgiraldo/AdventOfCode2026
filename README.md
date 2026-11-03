@@ -1,8 +1,8 @@
-# Advent of Code 2025 Python
+# Advent of Code 2026 Python
 
-My solutions to [Advent of Code 2025](https://adventofcode.com/2025) done in Python
+My solutions to [Advent of Code 2026](https://adventofcode.com/2026) done in Python
 
-[Viewer](https://sergiorgiraldo.github.io/AdventOfCode2025/viewer/)
+[Viewer](https://sergiorgiraldo.github.io/AdventOfCode2026/viewer/)
 
 ## Performance
 
@@ -40,7 +40,7 @@ setup a virtual env and install components
 
 ### git crypt
 
-- `git-crypt init`
+- `git-crypt init` (`brew install git-crypt`, if needed)
 - `git-crypt add-gpg-user sergio@giraldo.com.br`
 - Make sure the .gitattributes are copied from prev year
 
@@ -77,11 +77,11 @@ to make easier, I have this rule for [`ondir`](https://github.com/alecthomas/ond
 > .ondirrc
 
 ```ondir
-enter ~/source/AdventOfCode2025/(.*)
+enter ~/source/AdventOfCode2026/(.*)
     alias pt="python -m tests --verbose"
     alias pr="python -m solution"
 
-leave ~/source/AdventOfCode2025/(.*)
+leave ~/source/AdventOfCode2026/(.*)
     unalias pt
     unalias pr
 ```

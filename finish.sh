@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd src/advent-of-code-2025/
+cd src/advent-of-code-2026/
 
 for day in $(seq -w 01 12); do
     echo ""
@@ -51,12 +51,6 @@ echo "###########################"
 ./bumpversion.sh
 
 echo "###########################"
-echo "Backlog"
-echo "###########################"
-
-./backlog.sh
-
-echo "###########################"
 echo "Python - requirements.txt"
 echo "###########################"
 
@@ -64,7 +58,7 @@ uv pip freeze > requirements.txt
 
 git add --all . 
 
-git commit -S -m 'feat!: AOC 2025 completed.'
+git commit -S -m 'feat!: AOC 2026 completed.'
 
 git push -u origin HEAD
 
