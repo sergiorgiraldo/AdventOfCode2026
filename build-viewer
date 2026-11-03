@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+from pathlib import Path
+import shutil
+
+def do(which):
+    day = which
+    day = day.zfill(2)
+    code = os.path.join("src/advent-of-code-2025/solutions", f"day{day}")
+    code_fullpath = os.path.join(code, "solution.py")
+
+    if not Path(code_fullpath).exists(): 
+        return
+    
+    print("Building viewer for day {}...".format(day))
+
+    contents_code = Path(code_fullpath).read_text()
+
+    index_fullpath = os.path.join("viewer", "index.html")
+    contents_index = Path(index_fullpath).read_text()
+    link_day = "<a href='" + f"day{day}.html" + "'>" + \
+        f"Day {day}" + "</a><br />" + "\n" + "<!--NEXT-->"
+    contents_index = contents_index.replace("<!--NEXT-->", link_day)
+    Path(index_fullpath).write_text(contents_index)
+
+    solutionpage__fullpath = os.path.join("viewer", f"day{day}.html")
+    contents_page = """<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>\n"""
+    contents_page += "<script src=\"script.js\"></script>\n"
+
+    contents_page += "<div id=\"navigation\">\n"
+    contents_page += "<button onclick=\"navigateTo('prev')\">Previous Day</button>\n"
+    contents_page += "<button onclick=\"navigateTo('next')\">Next Day</button>\n"
+    contents_page += "</div>\n"
+
+    contents_page += "<h1>Day " + day + "</h1>\n"
+    lines = contents_code.split('\n') 
+    wrapped_lines = [f'<span>{line}</span>' for line in lines]
+    contents_code = '\n'.join(wrapped_lines)
+    contents_page += "<pre>\n" + contents_code + "\n</pre>"
+    Path(solutionpage__fullpath).write_text(contents_page)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Refreshing all days...")
+
+        src = "./src/advent-of-code-2025/misc/viewer.tmpl"
+        dst = "./viewer/index.html"
+        shutil.copy(src, dst)
+
+        for i in range(1, 13):
+            do(str(i))
+    else:
+        do(sys.argv[1])

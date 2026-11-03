@@ -1,0 +1,159 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 04</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2025/day/4</span>
+<span></span>
+<span>import time</span>
+<span>from collections import defaultdict</span>
+<span>from ..base.advent import *</span>
+<span></span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2025</span>
+<span>    _day = 4</span>
+<span></span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    # grids are good as complex numbers (day 10, 2024)</span>
+<span>    def Parse(self, input):</span>
+<span>        grid = defaultdict(lambda: ".")</span>
+<span>        </span>
+<span>        for i, line in enumerate(input):</span>
+<span>            for j, c in enumerate(line):</span>
+<span>                grid[i + 1j * j] = c</span>
+<span>        </span>
+<span>        return grid, i + 1, j + 1</span>
+<span></span>
+<span>    #         col</span>
+<span>    #       @  @  @</span>
+<span>    #  row  @  |  @</span>
+<span>    #       @  @  @</span>
+<span>    #</span>
+<span>    # Scan the @ positions, there must be less than 4 around the Roll |</span>
+<span>    def InspectRoll(self, grid, i, j):</span>
+<span>        position = i + 1j * j</span>
+<span></span>
+<span>        if grid[position] != "@":</span>
+<span>            return False</span>
+<span></span>
+<span>        directions = [</span>
+<span>            -1-1j,  -1+0j,  -1+1j,</span>
+<span>            0-1j,           0+1j, </span>
+<span>            1-1j,   1+0j,   1+1j  </span>
+<span>        ]</span>
+<span></span>
+<span>        rolls = sum(</span>
+<span>            1 for direction in directions </span>
+<span>            if grid[position + direction] == "@"</span>
+<span>        )</span>
+<span></span>
+<span>        return rolls < 4  # magic number given by the puzzle</span>
+<span></span>
+<span>    def DetermineRolls(self, input):</span>
+<span>        grid, rows, cols = self.Parse(input)</span>
+<span></span>
+<span>        res = sum(</span>
+<span>            1</span>
+<span>            for i in range(rows)</span>
+<span>            for j in range(cols)</span>
+<span>            if self.InspectRoll(grid, i, j)</span>
+<span>        )</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    # same algorithm as in determine but now you go back and check again if more rolls can be removed</span>
+<span>    def RemoveRolls(self, input):</span>
+<span>        res = 0</span>
+<span></span>
+<span>        grid, rows, cols = self.Parse(input)</span>
+<span></span>
+<span>        while True:</span>
+<span>            lifted = 0</span>
+<span></span>
+<span>            for i in range(rows):</span>
+<span>                for j in range(cols):</span>
+<span>                    if self.InspectRoll(grid, i, j):</span>
+<span>                        grid[i + 1j * j] = "x"</span>
+<span>                        lifted += 1</span>
+<span></span>
+<span>            if lifted == 0:</span>
+<span>                break</span>
+<span></span>
+<span>            res += lifted</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res = self.DetermineRolls(input)</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res = self.RemoveRolls(input)</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span></span>
+<span>if __name__ == "__main__":</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span></span>
+<span>    solution.part_2()</span>
+<span></span>
+</pre>
