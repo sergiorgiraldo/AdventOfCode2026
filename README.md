@@ -28,7 +28,7 @@ When advent begins, get the session cookie from the page and update these:
 
 ## virtual env
 
-setup a virtual env and install components
+setup a virtual env and install components (`curl -LsSf https://astral.sh/uv/install.sh | sh`, if needed)
 
 `uv venv`
 
